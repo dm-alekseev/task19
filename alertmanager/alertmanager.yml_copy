@@ -1,0 +1,16 @@
+global:
+  resolve_timeout: 5m
+
+route:
+  group_by: ['alertname']
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 3h
+  receiver: 'telegram'
+
+receivers:
+- name: 'telegram'
+  webhook_configs:
+    - url: 'https://api.telegram.org/bothttps://api.telegram.org/bot8197897210:AAEtm--oUzxm6k42CFets6IdlzLzswLWARo/getUpdates/sendMessage?chat_id=-4071470946&text={{ .Message }}'
+      send_resolved: true
+

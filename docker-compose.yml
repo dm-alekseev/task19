@@ -1,0 +1,48 @@
+services:
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus  
+    volumes:
+      - ./prometheus:/etc/prometheus/
+      - ./prometheus/alerts.yml:/etc/prometheus/alerts.yml  
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+        #- '--storage.tsdb.path=/prometheus'
+    networks:
+      - monitoring    
+    ports:
+      - 9090:9090
+
+  node-exporter:
+    container_name: node-exporter
+    image: prom/node-exporter:latest
+    networks:
+      - monitoring
+    ports:
+      - 9100:9100
+
+  alert-manager:
+    container_name: alert-manager
+    image: prom/alertmanager:latest
+    volumes:
+      - ./alertmanager:/etc/alertmanager/  
+    command:
+      - '--config.file=/etc/alertmanager/alertmanager.yml'
+    networks:
+      - monitoring
+    ports:   
+      - 9093:9093
+  
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin  
+    networks:
+      - monitoring
+networks:
+  monitoring:
+    driver: bridge
