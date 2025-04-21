@@ -9,8 +9,11 @@ groups:
       severity: warning
     annotations:
       summary: "CPU {{ $value | printf \"%.2f\" }}%! сервер {{ $labels.instance }} перегружен"
+
 - name: instanse-down
   rules:
   - alert: InstanceDown
     expr: up == 0
     for: 1m
+    labels:
+      source: " {{ $labels.instance }} "
