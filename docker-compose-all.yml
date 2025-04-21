@@ -1,0 +1,22 @@
+services:
+  node-exporter:
+    image: alpine:latest
+    container_name: alpine-exporter
+    hostname: alpine-node-exporter
+    networks:
+      - monitoring
+    ports:
+      - "9101:9101"
+    command: >
+      sh -c "
+      apk add --no-cache curl && \
+      curl -LO https://github.com/prometheus/node_exporter/releases/download/v1.6.1/node_exporter-1.6.1.linux-amd64.tar.gz && \
+      tar xvfz node_exporter-1.6.1.linux-amd64.tar.gz && \
+      mv node_exporter-1.6.1.linux-amd64/node_exporter /usr/local/bin/ && \
+      rm -rf node_exporter-1.6.1.linux-amd64* && \
+      node_exporter --web.listen-address=:9101
+      "
+
+networks:
+  monitoring:
+    driver: bridge
