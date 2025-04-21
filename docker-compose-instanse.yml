@@ -1,0 +1,25 @@
+services:
+
+  alpine:
+    image: alpine:latest
+    container_name: alpine
+    hostname: alpine  
+    networks:
+      - monitoring
+    
+
+  alpine-exporter:
+    container_name: alpine-exporter
+    hostname: alpine-exporter  
+    image: prom/node-exporter:latest
+    networks:
+      - monitoring
+    ports:
+      - 9101:9101
+    command:
+      - '--web.listen-address=:9101'     
+
+networks:
+  monitoring:
+    name: monitoring
+    driver: bridge        
